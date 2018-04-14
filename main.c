@@ -1,10 +1,10 @@
 /*
  ============================================================================
- Name        : arithmetic stack machine
- Author      : Thiabaud Engelbrecht
- Version     : 0.0
+ Name        : Arithmetic Machine
+ Author      : UBC Launchpad
+ Version     : 1.0
  Copyright   :
- Description : stack machine that runs bytecode.
+ Description : Stack-based virtual machine that performs simple arithmetic.
  ============================================================================
  */
 
@@ -27,7 +27,6 @@ enum opcodes {
     DCONST_2  = 0x0D, // push 2.0 onto stack
     /* make sure you consider endianness */
     DCONST    = 0x0F, // push next 8 bytes onto stack as double constant
-
     /* arithmetic operations */
     ADD       = 0x60, // add two doubles
     SUB       = 0x61, // subtract two doubles
@@ -56,7 +55,7 @@ typedef struct {
 
 VM* newVM(char* code /* pointer to bytecode */ ) {
     VM* vm = malloc(sizeof(VM));
-    vm->code = code;
+    vm->code = code; 
     vm->pc = 0;
     vm->sp = -1;
     vm->r1 = vm->r2 = 0;    // init registers to 0
@@ -72,7 +71,7 @@ void delVM(VM* vm){
 int run(VM* vm){
     for (;;) {
         unsigned char opcode = NCODE(vm);        // store next bytecode in `opcode'
-        double a, b, v;
+        double a, b, v;                          // use these to store intermediate values when implementing opcodes below
         switch (opcode) {   // decode
         case HALT: return EXIT_SUCCESS;  // exit successfully
         case NOP: break;    // pass
@@ -90,7 +89,7 @@ int run(VM* vm){
             break;
         case DCONST:        // reads next 8 bytes of opcode as a double, and stores it on the stack.
             // TODO: implement this.
-            // HINT: use memcpy to read next 8 bytes of code as a double. make sure you think about endianness.
+            // HINT: use memcpy to read next 8 bytes of code as a double. make sure you consider endianness.
             break;
         case ADD:           // add two doubles from top of stack and push result back onto stack
             b = POP(vm);
@@ -137,15 +136,15 @@ int run(VM* vm){
 }
 
 int main(void) {
-    /* in a real VM, we'd read bytecode from a file, but for brevity's sake we'll read
-       from an array.
-     */
-    // simple example: push 2 onto stack, push 1 onto stack, subtract them, print the result, exit (should print 1.0)
-    char bytecode[] = { DCONST_2,
-                        DCONST_1,
-                        SUB,
-                        PRINT,
-                        HALT };
+	/* in a real VM, we'd read bytecode from a file, but for brevity's sake we'll read
+	from an array.
+	*/
+	// simple example: push 2 onto stack, push 1 onto stack, subtract them, print the result, exit (should print 1.0)
+	char bytecode[] = { DCONST_2,
+		DCONST_1,
+		SUB,
+		PRINT,
+		HALT };
 	VM* vm = newVM(bytecode /* program to execute */ );
 	int exit_status = run(vm);
 	delVM(vm);
