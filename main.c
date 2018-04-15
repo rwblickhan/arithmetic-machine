@@ -109,13 +109,13 @@ int run(VM* vm){
         case NEG:                         // negates top of stack
             //TODO: implement this.
             break;
-        case LD1:          // put value from r1 in top of stack
+        case LD1:          // put value from r1 on top of stack
             // TODO: implement this.
             break;
         case ST1:                         // store top of stack in r1
             // TODO: implement this.
             break;
-        case LD2:           // put value from r1 in top of stack
+        case LD2:           // put value from r2 on top of stack
             // TODO: implement this.
             // HINT: should be similar to LD1.
             break;
